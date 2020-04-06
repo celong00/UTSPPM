@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- Include meta tag to ensure proper rendering and touch zooming -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- Include jQuery Mobile stylesheets -->
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+
+	<!-- Include the jQuery library -->
+	<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+	<!-- Include the jQuery Mobile library -->
+	<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+
+	<script type="text/javascript">
+		var jumlahperpinjaman=[];
+		var jumlahpercicilan=[];
+		var totalpinjaman=[];
+		var count=0;
+		$(function(){
+			$(document).bind( "taphold", tapholdHandler );
+
+			function tapholdHandler( event ){
+				alert("Pinjaman Terakhir: "+jumlahperpinjaman[count-1]+" Cicilan: "+jumlahpercicilan[count-1]+" Total Pengembalian: "+totalpinjaman[count-1]);
+			}
+		});
+		$(function(){
+			$(document).bind( "tap", tapHandler );
+
+			function tapHandler( event ){
+				alert("Total Peminjaman ada "+ count);
+			}
+		});
+		function masukPinjaman(){
+			var hasilin=document.getElementById('hasilinputan');
+			var pinjaman=parseInt(document.getElementById('besarpinjaman').value);
+			var cicilan=parseInt(document.getElementById('lamacicilan').value);
+			var hasil;
+			if(cicilan>=1&&cicilan<=6){
+				bunga=pinjaman * 2 * cicilan /100;
+				hasil=pinjaman+(pinjaman * 2 * cicilan /100);
+			}
+			else if(cicilan>=7&&cicilan<=12){
+				bunga=pinjaman * 2 * cicilan /100;
+				hasil=pinjaman+(pinjaman * 1.5 * cicilan / 100);
+			}
+			else if(cicilan>12){
+				bunga=pinjaman * 2 * cicilan /100;
+				hasil=pinjaman+(pinjaman * 1 * cicilan / 100);
+			}
+			
+			count++;
+			$('#banyakinputan').html(count);
+			$('#hasilinputan').append("Pinjaman: "+count+"<br> besar pinjaman: "+pinjaman+"<br> Bunga: "+bunga+"<br> Total pinjaman: "+hasil+"<br><br>");
+			jumlahperpinjaman.push(pinjaman);
+			jumlahpercicilan.push(cicilan);
+			totalpinjaman.push(hasil);
+		}
+		function viewall(){
+			$("#hasilinformasicicilan").html("");
+			for(var i=0;i<count;i++){
+				var cer=1;
+				$("#hasilinformasicicilan").append("Peminjaman ke: "+cer+"<br>");
+				var total=totalpinjaman[i];
+				var cicilan=jumlahpercicilan[i];
+				var cek=total/cicilan;
+				var cor=1;
+				cer++;
+				for(var j=0;j<cicilan;j++){
+					if(j!=cicilan-1)
+						total=total-cek;
+					else{
+						var temp=cek;
+						cek=total;
+						total=total-cek;
+					}
+					$("#hasilinformasicicilan").append(" Bulan "+cor+" Bayar : "+cek+" sisa: "+total+"<br>");
+					cor++;
+				}
+				$("#hasilinformasicicilan").append("<br>");
+			}
+		}
+		function viewPinjaman(){
+			var col=1;
+			$("#hasillistpeminjaman").html("");
+			var text=document.getElementById("hasillistpeminjaman");
+			alert(count);
+			for(var i=0;i<count;i++){
+				$("#hasillistpeminjaman").append("Pinjaman: "+col+" "+jumlahperpinjaman[i]+" Cicilan: "+jumlahpercicilan[i]+" Total Pengembalian: "+totalpinjaman[i]+"<br>");
+				col++;
+
+			}
+		}
+
+
+
+	</script>
+</head>
+<body>
+	
+	<div data-role="page" id="pageone">
+		<div data-role="header">
+			<div data-role="navbar">
+				<ul>
+					<li><a href="#pageone" data-theme="b">Home</a></li>
+					<li><a href="#pagetwo" data-theme="b">Detail Peminjaman</a></li>
+					<li><a href="#pagethree" data-theme="b">Informasi Cicilan</a></li>
+				</ul>
+			</div>
+		</div>
+		<label>
+			Masukkan Besar Pinjaman:
+		</label>
+		<input type="number" name="besarpinjaman" id="besarpinjaman">
+		<label>
+			Masukkan Lama Cicilan:
+		</label>
+		<input type="number" name="lamacicilan" id="lamacicilan">
+		<input type="button" onclick="masukPinjaman()" value="Tekan">Banyak Inputan: 
+		<label id="banyakinputan"><br></label>
+		<label id="hasilinputan"></label>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<div data-role="footer">
+			<h1>By: Michael Alexander Rustan C14180175</h1>
+		</div>
+
+	</div>
+	<div data-role="page" id="pagetwo">
+		<div data-role="header">
+			<div data-role="navbar">
+				<ul>
+					<li><a href="#pageone" data-theme="b">Home</a></li>
+					<li><a href="#pagetwo" data-theme="b">Detail Peminjaman</a></li>
+					<li><a href="#pagethree" data-theme="b">Informasi Cicilan</a></li>
+				</ul>
+			</div>
+		</div>
+		<label>Klik untuk melihat list peminjaman</label>
+		<input type="button" onclick="viewPinjaman()" value="Tekan">
+		<label id="hasillistpeminjaman">
+			
+		</label>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<div class="ui-field-contain">
+			    <label for="select-custom-2"></label>
+			    <select name="select-custom-2" id="select-custom-2" data-native-menu="false" data-mini="true">
+				        <option value="1">Tidak ada Fungsi</option>
+				        <option value="2">Tidak ada</option>
+			    </select>
+		</div>
+		<br>
+		<br>
+		<br>
+		<div data-role="footer">
+			<h1>By: Michael Alexander Rustan C14180175</h1>
+		</div>
+	</div>
+	<div data-role="page" id="pagethree">
+		<div data-role="header">
+			<div data-role="navbar">
+				<ul>
+					<li><a href="#pageone" data-theme="b">Home</a></li>
+					<li><a href="#pagetwo" data-theme="b">Detail Peminjaman</a></li>
+					<li><a href="#pagethree" data-theme="b">Informasi Cicilan</a></li>
+				</ul>
+			</div>
+		</div>
+		<label>Klik untuk melihat halaman cicilan</label>
+		<input type="button" onclick="viewall()" value="Tekan">
+
+
+		<label id="hasilinformasicicilan">
+
+
+			
+		</label>
+
+		
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<form>
+			    <input type="checkbox" name="checkbox-mini-0" id="checkbox-mini-0" data-mini="true">
+			    <label for="checkbox-mini-0">Tidak ada fungsi</label>
+		</form>
+		<br>
+		<br>
+		<br>
+		<div data-role="footer">
+			<h1>By: Michael Alexander Rustan C14180175</h1>
+		</div>
+	</div>
+
+
+</body>
+
+</html>
